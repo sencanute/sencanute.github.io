@@ -1,91 +1,83 @@
-const tl = gsap.timeline({paused: true});
+(function($) {
+  "use strict";
 
-tl.from(
-    ".gsap-swipe",
-    {
-      y: 20,
-      x: 20,
-      rotate: -40,
-      duration: 3,
-      transformOrigin: '30% 80%',
-      ease: Elastic.easeOut.config(1, 0.5),
-    }, 0
-  )
-  .fromTo(
-    ".swipe",
-    {
-      xPercent: -100
-    },
-    {
-      duration: 1,
-      xPercent: 100,
-      ease: Sine.easeInOut,
-      stagger: {
-        each: 0.15
-      }
-    }, 0
-  )
-  .from(
-    ".maskSwipe",
-    {
-      xPercent: -100,
-      ease: Sine.easeInOut
-    },
-    0.4
-  )
-  .from(
-    "#hello",
-    {
-      duration: 1.5,
-      drawSVG: "0%"
-    },
-    1
-  )
-  .from(
-    ".swoop",
-    {
-      duration: 2,
-      drawSVG: "0%"
-    },
-    1
-  )
-  .from(
-    ".line",
-    {
-      drawSVG: "0%",
-      duration: 0.5,
-      stagger: {
-        each: 0.2
-      }
-    },
-    1
-  )
-  .from(
-    ".shape",
-    {
-      scale: 0,
-      duration: 1.3,
-      transformOrigin: "50% 50%",
-      rotate: '+=random(-60, 60)',
-      ease: Elastic.easeOut.config(1, 0.8),
-      stagger: {
-        each: 0.2
-      }
-    },
-    0.2
-  );
+  var burgerMenu = function() {
+    $('.burger').click(function(e) {
+      $(window).scrollTop(0);
+      if (!$('.burger').hasClass('active'))
+        $('.burger').addClass('active');
+      else
+        $('.burger').removeClass('active');
+    });
+  }
+  burgerMenu();
 
-// ScrubGSAPTimeline(tl);
+  var siteIstotope = function() {
+    var $container = $('#portfolio-grid').isotope({
+      itemSelector: '.item',
+      isFitWidth: true
+    });
 
-let hover = document.querySelector('.js-hover');
+    $(window).resize(function() {
+      $container.isotope({
+        columnWidth: '.col-sm-3'
+      });
+    });
 
-hover.addEventListener('mouseover', playTl);
-hover.addEventListener('mouseout', resetTl);
+    $container.isotope({
+      filter: '*'
+    });
 
-function playTl(){
-  tl.timeScale(1.25).restart();
-}
+    $('#filters').on('click', 'a', function(e) {
+      e.preventDefault();
+      var filterValue = $(this).attr('data-filter');
+      $container.isotope({
+        filter: filterValue
+      });
+      $('#filters a').removeClass('active');
+      $(this).addClass('active');
+    });
+  }
+  $(window).on('load', function() {
+    siteIstotope();
+  });
 
-function resetTl(){
-  tl.progress(0).pause();
-}
+  var siteOwlCarousel = function() {
+    $('.testimonial-carousel').owlCarousel({
+      center: true,
+      items: 1,
+      loop: true,
+      margin: 0,
+      autoplay: true,
+      smartSpeed: 1000,
+    });
+  };
+  siteOwlCarousel();
+
+  $(window).on('load', function() {
+    AOS.init({
+      easing: 'ease',
+      duration: 1000,
+      once: true
+    });
+  });
+
+})(jQuery);
+
+jQuery(document).ready(function() {
+
+  var mouseX = 0, mouseY = 0;
+  var xp = 0, yp = 0;
+
+  $(document).mousemove(function(e){
+    mouseX = e.pageX - 30;
+    mouseY = e.pageY - 30;
+  });
+
+  setInterval(function(){
+    xp += ((mouseX - xp)/6);
+    yp += ((mouseY - yp)/6);
+    $("#circle").css({left: xp +'px', top: yp +'px'});
+  }, 20);
+
+});
