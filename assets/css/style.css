@@ -271,13 +271,13 @@ from {
 }
 
 a:hover {
-  color: ##86A28C;
+  color: #86A28C;
  text-decoration: none;
  transition: .6s all ease-in-out;
 }
 
 navbar-links a.active {
-  color: ##86A28C;
+  color: #86A28C;
 }
 
 /* Navbar: Alternate Pages */
